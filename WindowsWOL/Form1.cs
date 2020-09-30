@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
 using System.Management.Automation;
+using Microsoft.Win32;
 
 namespace WindowsWOL
 {
@@ -92,19 +93,35 @@ namespace WindowsWOL
 
         private void Button_EnableWOL_Click(object sender, EventArgs e)
         {
+            // --| (Windows 8-10 only)
+            // --| Disable "Fast startup" under power settings, because this is known causing problems to many computers using Wake-on-LAN
+            var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Power", true);
+
+            // --| If the key doesn't exist for some reason, create one
+            if(key == null)
+            {
+                key = Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Power");
+            }
+
+            // --| Ifd the key doesn't have any value set, we set it
+            if(key.GetValue("HiberbootEnabled") == null)
+            {
+                key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
+            }
+
+            // --| Disable "Fast startup"
+            key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
+
             // --| Using windows powercfg.exe
             // --| Enable the option "Allow this device to wake the computer" for the user's currently used network adapter.
             RunSilentProcess("-deviceenablewake \"" + NetWorkAdapterName.Trim() + "\"");
 
             // --| Enable Wake on magic packet, Shutdown Wake Up and disable Energy Efficient Ethernet properties
             // --| https://docs.microsoft.com/en-us/powershell/module/netadapter/set-netadapteradvancedproperty?view=win10-ps
-            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"");
-            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"");
-            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
-
+            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
 
             // --| Done :3
-            MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
