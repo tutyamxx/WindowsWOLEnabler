@@ -9,7 +9,7 @@
 * Simple Windows 10 tool to enable Wake-on-LAN with one single click
 * Obviously, you need to enable WOL in your `BIOS` settings first. To do that, simply Google `how to enable wake on lan in BIOS`
 
-# What it does
+# What it does (IN ONE CLICK ONLY)
 * It enables Wake-on-LAN options in the currently used network adapter for Windows OS.
 * It disables `Energy Efficient Ethernet`, enables `Wake on magic packet` and `Shutdown Wake Up` advanced network adapter properties, in order to be able to be awaken by [Magic Packets](https://en.wikipedia.org/wiki/Wake-on-LAN#Magic_packet)
 * It disables `Turn on fast start-up (recommended)` option in system power settings, because this is known causing problems to many computers using Wake-on-LAN
