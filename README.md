@@ -11,5 +11,6 @@
 
 # What it does
 * It enables Wake-on-LAN options in the currently used network adapter for Windows OS.
-* It also changes the advanced network adapter settings accordingly, in order to be able to be awaken by [Magic Packets](https://en.wikipedia.org/wiki/Wake-on-LAN#Magic_packet)
+* It disables `Energy Efficient Ethernet`, enables `Wake on magic packet` and `Shutdown Wake Up` advanced network adapter properties, in order to be able to be awaken by [Magic Packets](https://en.wikipedia.org/wiki/Wake-on-LAN#Magic_packet)
+* It disables `Turn on fast start-up (recommended)` option in system power settings, because this will cause problems using Wake-on-LAN to almost all devices
 * It provides your device MAC address and local IPv4 address for using it with your mobile phone Wake on LAN applications or your scripts.
