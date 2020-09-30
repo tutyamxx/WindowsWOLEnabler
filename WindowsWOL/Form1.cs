@@ -7,6 +7,7 @@ using System.Net.NetworkInformation;
 using System.Windows.Forms;
 using System.Management.Automation;
 using Microsoft.Win32;
+using System.Threading;
 
 namespace WindowsWOL
 {
@@ -21,12 +22,12 @@ namespace WindowsWOL
 
         private string GetInternalIP()
         {
-            IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress[] addr = hostEntry.AddressList;
+            IPHostEntry HostEntry = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress[] addr = HostEntry.AddressList;
 
-            var ip = addr.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).FirstOrDefault();
+            var LocalIP = addr.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).FirstOrDefault();
 
-            return ip.ToString() ?? "";
+            return LocalIP.ToString() ?? "";
         }
 
         private void RunSilentProcess(string Argument)
@@ -50,20 +51,15 @@ namespace WindowsWOL
                 PowerShellInstance.AddScript(Argument.Trim());
                 IAsyncResult result = PowerShellInstance.BeginInvoke();
 
-                while (result.IsCompleted == false)
-                {
-                    Button_EnableWOL.Text = "Enabling Wake-on-LAN...";
-                    Button_EnableWOL.Enabled = false;
-                }
-
-                Button_EnableWOL.Enabled = true;
-                Button_EnableWOL.Text = "Enable Wake-on-LAN";
+                while (result.IsCompleted == false) { }
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Button_EnableWOL.Enabled = true;
             Button_EnableWOL.Text = "Enable Wake-on-LAN";
+
             NetworkInterface[] networks = NetworkInterface.GetAllNetworkInterfaces();
 
             var GetActiveNetworkAdapter = networks.First(x => x.NetworkInterfaceType != NetworkInterfaceType.Loopback && x.NetworkInterfaceType != NetworkInterfaceType.Tunnel && x.OperationalStatus == OperationalStatus.Up && x.Name.StartsWith("vEthernet") == false);
@@ -93,23 +89,25 @@ namespace WindowsWOL
 
         private void Button_EnableWOL_Click(object sender, EventArgs e)
         {
+            Button_EnableWOL.Enabled = false;
+            Button_EnableWOL.Text = "Please wait...";
+
+            ThreadPool.QueueUserWorkItem(EnableWakeonLAN);
+        }
+
+        private void EnableWakeonLAN(object state)
+        {
             // --| (Windows 8-10 only)
-            // --| Disable "Fast startup" under power settings, because this is known causing problems to many computers using Wake-on-LAN
+            // --| Disable "Turn on fast start-up (recommended)" under power settings, because this is known causing problems to many computers using Wake-on-LAN
             var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Power", true);
 
-            // --| If the key doesn't exist for some reason, create one
-            if(key == null)
+            // --| If the key doesn't exist for some reason, mainly because is OS doesn't support "Turn on fast start-up (recommended)" option
+            if (key == null)
             {
-                key = Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Power");
+                return;
             }
 
-            // --| Ifd the key doesn't have any value set, we set it
-            if(key.GetValue("HiberbootEnabled") == null)
-            {
-                key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
-            }
-
-            // --| Disable "Fast startup"
+            // --| Disable "Turn on fast start-up (recommended)"
             key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
 
             // --| Using windows powercfg.exe
@@ -122,6 +120,13 @@ namespace WindowsWOL
 
             // --| Done :3
             MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // --| Re-enable the button
+            Invoke(new Action(() =>
+            {
+                Button_EnableWOL.Enabled = true;
+                Button_EnableWOL.Text = "Enable Wake-on-LAN";
+            }));
         }
     }
 }
