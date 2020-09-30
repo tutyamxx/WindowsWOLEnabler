@@ -123,28 +123,28 @@ namespace WindowsWOL
             // --| Disable "Turn on fast start-up (recommended)" under power settings, because this is known causing problems to many computers using Wake-on-LAN
             var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Power", true);
 
-            // --| If the key doesn't exist for some reason, mainly because is OS doesn't support "Turn on fast start-up (recommended)" option
-            if (key == null)
+            if (key != null)
             {
-                return;
+                if(key.GetValue("HiberbootEnabled") != null)
+                {
+                    // --| Disable "Turn on fast start-up (recommended)"
+                    key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
+                }
             }
-
-            // --| Disable "Turn on fast start-up (recommended)"
-            key.SetValue("HiberbootEnabled", "0", RegistryValueKind.DWord);
 
             // --| Using windows powercfg.exe
             // --| Enable the option "Allow this device to wake the computer" for the user's currently used network adapter.
             RunSilentProcess("-deviceenablewake \"" + NetWorkAdapterName.Trim() + "\"");
 
-            // --| Enable Wake on magic packet, Shutdown Wake Up and disable Energy Efficient Ethernet properties
-            // --| https://docs.microsoft.com/en-us/powershell/module/netadapter/set-netadapteradvancedproperty?view=win10-ps
-            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
-
             // --| Disable Link State Power Management (PCI Express) for the current user power plan
             // --| Link state power management: 	https://docs.microsoft.com/en-us/windows-hardware/customize/power-settings/pci-express-settings-link-state-power-management
             // --| PCI Express settings overview:	https://docs.microsoft.com/en-us/windows-hardware/customize/power-settings/pci-express-settings
             // --| powercfg /setacvalueindex scheme_GUID (Specifies a power scheme GUID) | sub_GUID (PCI Express) | setting_GUID (Link State Power Management) | setting_index (000) = Off	
-            RunSilentPowerShell("powercfg /setacvalueindex " + GetDevicePowerPlan() + " 501a4d13-42af-4429-9fd1-a8218c268e20 ee12f906-d277-404b-b6da-e5fa1a576df5 000");
+            RunSilentProcess("/setacvalueindex " + GetDevicePowerPlan() + " 501a4d13-42af-4429-9fd1-a8218c268e20 ee12f906-d277-404b-b6da-e5fa1a576df5 000");
+
+            // --| Enable Wake on magic packet, Shutdown Wake Up and disable Energy Efficient Ethernet properties
+            // --| https://docs.microsoft.com/en-us/powershell/module/netadapter/set-netadapteradvancedproperty?view=win10-ps
+            RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
 
             // --| Done :3
             MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
