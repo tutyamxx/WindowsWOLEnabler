@@ -55,6 +55,28 @@ namespace WindowsWOL
             }
         }
 
+        private string GetDevicePowerPlan()
+        {
+            // --| Get currently used Windows power plan GUID
+            var PowerShellInstance = PowerShell.Create().AddScript("powercfg /getactivescheme");
+            string PowerGuid = "";
+
+            // --| Parse the output from Power Shell to get only the GUID
+            foreach (dynamic item in PowerShellInstance.Invoke().ToArray())
+            {
+                string ShellResult = string.Join("", item);
+                string FormatString1 = ShellResult.Substring(ShellResult.LastIndexOf(": ") + 1);
+
+                // --| PowerGuid will be equal to something like 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c which is equal to (High Performance) power plan
+                // --| Obviously it will be filled with the user's actual power plan guid
+                PowerGuid = FormatString1.Substring(0, FormatString1.IndexOf("(")).Trim();
+
+                return PowerGuid;
+            }
+
+            return PowerGuid;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             Button_EnableWOL.Enabled = true;
@@ -117,6 +139,12 @@ namespace WindowsWOL
             // --| Enable Wake on magic packet, Shutdown Wake Up and disable Energy Efficient Ethernet properties
             // --| https://docs.microsoft.com/en-us/powershell/module/netadapter/set-netadapteradvancedproperty?view=win10-ps
             RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
+
+            // --| Disable Link State Power Management (PCI Express) for the current user power plan
+            // --| Link state power management: 	https://docs.microsoft.com/en-us/windows-hardware/customize/power-settings/pci-express-settings-link-state-power-management
+            // --| PCI Express settings overview:	https://docs.microsoft.com/en-us/windows-hardware/customize/power-settings/pci-express-settings
+            // --| powercfg /setacvalueindex scheme_GUID (Specifies a power scheme GUID) | sub_GUID (PCI Express) | setting_GUID (Link State Power Management) | setting_index (000) = Off	
+            RunSilentPowerShell("powercfg /setacvalueindex " + GetDevicePowerPlan() + " 501a4d13-42af-4429-9fd1-a8218c268e20 ee12f906-d277-404b-b6da-e5fa1a576df5 000");
 
             // --| Done :3
             MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
