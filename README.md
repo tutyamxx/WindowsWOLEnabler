@@ -1,7 +1,7 @@
 # Windows Wake-on-LAN Enabler
 
 <p align="center">
-  <img src="https://i.imgur.com/QsLIJI4.png"><br/>
+  <img src="https://i.imgur.com/qULwoW7.png"><br/>
 </p>
 
 # Information
