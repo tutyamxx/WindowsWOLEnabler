@@ -8,6 +8,7 @@
 * NOTE: In the picture listed above, the IPv4 and MAC addresses are **FAKE** due to privacy reasons, but it will list your real stuff once you run the program.
 * Simple Windows 10 tool to enable Wake-on-LAN with one single click
 * Obviously, you need to enable WOL in your `BIOS` settings first. To do that, simply Google `how to enable wake on lan in BIOS`
+* You need **>= .NET Framework 4.5**
 
 # What it does (IN ONE CLICK ONLY)
 * It enables Wake-on-LAN options in the currently used network adapter for Windows OS.
