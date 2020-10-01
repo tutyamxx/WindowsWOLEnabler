@@ -28,24 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUI));
             this.label_NetworkAdapterName = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pictureBox_Logo = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.pictureBox_IPAddress = new System.Windows.Forms.PictureBox();
+            this.pictureBox_MacAddress = new System.Windows.Forms.PictureBox();
             this.label_InfoPCTip = new System.Windows.Forms.Label();
             this.textBox_IPv4_Address = new System.Windows.Forms.TextBox();
             this.textBox_MacAddress = new System.Windows.Forms.TextBox();
             this.label_LocalIP = new System.Windows.Forms.Label();
             this.label_MacAdress = new System.Windows.Forms.Label();
             this.Button_EnableWOL = new System.Windows.Forms.Button();
-            this.pictureBox_IPAddress = new System.Windows.Forms.PictureBox();
-            this.pictureBox_MacAddress = new System.Windows.Forms.PictureBox();
-            this.pictureBox_Logo = new System.Windows.Forms.PictureBox();
+            this.pictureBox_LoadingAnim = new System.Windows.Forms.PictureBox();
+            this.toolTip_Info = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_IPAddress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_MacAddress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_LoadingAnim)).BeginInit();
             this.SuspendLayout();
             // 
             // label_NetworkAdapterName
@@ -56,6 +60,7 @@
             this.label_NetworkAdapterName.TabIndex = 1;
             this.label_NetworkAdapterName.Text = "-";
             this.label_NetworkAdapterName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip_Info.SetToolTip(this.label_NetworkAdapterName, "Your currently running network adapter");
             // 
             // groupBox1
             // 
@@ -68,6 +73,16 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Information";
+            // 
+            // pictureBox_Logo
+            // 
+            this.pictureBox_Logo.Image = global::WindowsWOLEnabler.Properties.Resources.logo;
+            this.pictureBox_Logo.Location = new System.Drawing.Point(95, 19);
+            this.pictureBox_Logo.Name = "pictureBox_Logo";
+            this.pictureBox_Logo.Size = new System.Drawing.Size(141, 75);
+            this.pictureBox_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_Logo.TabIndex = 0;
+            this.pictureBox_Logo.TabStop = false;
             // 
             // groupBox2
             // 
@@ -85,69 +100,6 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "PC Information";
-            // 
-            // label_InfoPCTip
-            // 
-            this.label_InfoPCTip.Cursor = System.Windows.Forms.Cursors.Help;
-            this.label_InfoPCTip.ForeColor = System.Drawing.Color.MediumSeaGreen;
-            this.label_InfoPCTip.Location = new System.Drawing.Point(9, 97);
-            this.label_InfoPCTip.Name = "label_InfoPCTip";
-            this.label_InfoPCTip.Size = new System.Drawing.Size(321, 23);
-            this.label_InfoPCTip.TabIndex = 4;
-            this.label_InfoPCTip.Text = "Information needed for setting up Wake-on-LAN";
-            this.label_InfoPCTip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // textBox_IPv4_Address
-            // 
-            this.textBox_IPv4_Address.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_IPv4_Address.Location = new System.Drawing.Point(118, 65);
-            this.textBox_IPv4_Address.Name = "textBox_IPv4_Address";
-            this.textBox_IPv4_Address.ReadOnly = true;
-            this.textBox_IPv4_Address.Size = new System.Drawing.Size(212, 20);
-            this.textBox_IPv4_Address.TabIndex = 3;
-            this.textBox_IPv4_Address.TabStop = false;
-            this.textBox_IPv4_Address.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBox_MacAddress
-            // 
-            this.textBox_MacAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_MacAddress.Location = new System.Drawing.Point(118, 27);
-            this.textBox_MacAddress.Name = "textBox_MacAddress";
-            this.textBox_MacAddress.ReadOnly = true;
-            this.textBox_MacAddress.Size = new System.Drawing.Size(212, 20);
-            this.textBox_MacAddress.TabIndex = 2;
-            this.textBox_MacAddress.TabStop = false;
-            this.textBox_MacAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label_LocalIP
-            // 
-            this.label_LocalIP.AutoSize = true;
-            this.label_LocalIP.Location = new System.Drawing.Point(39, 67);
-            this.label_LocalIP.Name = "label_LocalIP";
-            this.label_LocalIP.Size = new System.Drawing.Size(73, 13);
-            this.label_LocalIP.TabIndex = 1;
-            this.label_LocalIP.Text = "IPv4 Address:";
-            // 
-            // label_MacAdress
-            // 
-            this.label_MacAdress.AutoSize = true;
-            this.label_MacAdress.Location = new System.Drawing.Point(40, 29);
-            this.label_MacAdress.Name = "label_MacAdress";
-            this.label_MacAdress.Size = new System.Drawing.Size(72, 13);
-            this.label_MacAdress.TabIndex = 0;
-            this.label_MacAdress.Text = "Mac Address:";
-            // 
-            // Button_EnableWOL
-            // 
-            this.Button_EnableWOL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_EnableWOL.Location = new System.Drawing.Point(107, 333);
-            this.Button_EnableWOL.Name = "Button_EnableWOL";
-            this.Button_EnableWOL.Size = new System.Drawing.Size(141, 33);
-            this.Button_EnableWOL.TabIndex = 4;
-            this.Button_EnableWOL.Text = "Enable Wake-on-LAN";
-            this.Button_EnableWOL.UseVisualStyleBackColor = true;
-            this.Button_EnableWOL.Click += new System.EventHandler(this.Button_EnableWOL_Click);
             // 
             // pictureBox_IPAddress
             // 
@@ -169,21 +121,97 @@
             this.pictureBox_MacAddress.TabIndex = 5;
             this.pictureBox_MacAddress.TabStop = false;
             // 
-            // pictureBox_Logo
+            // label_InfoPCTip
             // 
-            this.pictureBox_Logo.Image = global::WindowsWOLEnabler.Properties.Resources.logo;
-            this.pictureBox_Logo.Location = new System.Drawing.Point(95, 19);
-            this.pictureBox_Logo.Name = "pictureBox_Logo";
-            this.pictureBox_Logo.Size = new System.Drawing.Size(141, 75);
-            this.pictureBox_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox_Logo.TabIndex = 0;
-            this.pictureBox_Logo.TabStop = false;
+            this.label_InfoPCTip.Cursor = System.Windows.Forms.Cursors.Help;
+            this.label_InfoPCTip.ForeColor = System.Drawing.Color.MediumSeaGreen;
+            this.label_InfoPCTip.Location = new System.Drawing.Point(9, 97);
+            this.label_InfoPCTip.Name = "label_InfoPCTip";
+            this.label_InfoPCTip.Size = new System.Drawing.Size(321, 23);
+            this.label_InfoPCTip.TabIndex = 4;
+            this.label_InfoPCTip.Text = "Information you may need for setting up Wake-on-LAN";
+            this.label_InfoPCTip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBox_IPv4_Address
+            // 
+            this.textBox_IPv4_Address.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_IPv4_Address.Location = new System.Drawing.Point(118, 65);
+            this.textBox_IPv4_Address.Name = "textBox_IPv4_Address";
+            this.textBox_IPv4_Address.ReadOnly = true;
+            this.textBox_IPv4_Address.Size = new System.Drawing.Size(212, 20);
+            this.textBox_IPv4_Address.TabIndex = 3;
+            this.textBox_IPv4_Address.TabStop = false;
+            this.textBox_IPv4_Address.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip_Info.SetToolTip(this.textBox_IPv4_Address, "Your device local IPv4 address");
+            // 
+            // textBox_MacAddress
+            // 
+            this.textBox_MacAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_MacAddress.Location = new System.Drawing.Point(118, 27);
+            this.textBox_MacAddress.Name = "textBox_MacAddress";
+            this.textBox_MacAddress.ReadOnly = true;
+            this.textBox_MacAddress.Size = new System.Drawing.Size(212, 20);
+            this.textBox_MacAddress.TabIndex = 2;
+            this.textBox_MacAddress.TabStop = false;
+            this.textBox_MacAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip_Info.SetToolTip(this.textBox_MacAddress, "Your device MAC address");
+            // 
+            // label_LocalIP
+            // 
+            this.label_LocalIP.AutoSize = true;
+            this.label_LocalIP.Location = new System.Drawing.Point(39, 67);
+            this.label_LocalIP.Name = "label_LocalIP";
+            this.label_LocalIP.Size = new System.Drawing.Size(73, 13);
+            this.label_LocalIP.TabIndex = 1;
+            this.label_LocalIP.Text = "IPv4 Address:";
+            this.toolTip_Info.SetToolTip(this.label_LocalIP, "Your device local IPv4 address");
+            // 
+            // label_MacAdress
+            // 
+            this.label_MacAdress.AutoSize = true;
+            this.label_MacAdress.Location = new System.Drawing.Point(40, 29);
+            this.label_MacAdress.Name = "label_MacAdress";
+            this.label_MacAdress.Size = new System.Drawing.Size(72, 13);
+            this.label_MacAdress.TabIndex = 0;
+            this.label_MacAdress.Text = "Mac Address:";
+            this.toolTip_Info.SetToolTip(this.label_MacAdress, "Your device MAC address");
+            // 
+            // Button_EnableWOL
+            // 
+            this.Button_EnableWOL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_EnableWOL.Location = new System.Drawing.Point(107, 342);
+            this.Button_EnableWOL.Name = "Button_EnableWOL";
+            this.Button_EnableWOL.Size = new System.Drawing.Size(141, 33);
+            this.Button_EnableWOL.TabIndex = 4;
+            this.Button_EnableWOL.Text = "Enable Wake-on-LAN";
+            this.toolTip_Info.SetToolTip(this.Button_EnableWOL, "Clicking this button will enable Wake-on-LAN on your device");
+            this.Button_EnableWOL.UseVisualStyleBackColor = true;
+            this.Button_EnableWOL.Click += new System.EventHandler(this.Button_EnableWOL_Click);
+            // 
+            // pictureBox_LoadingAnim
+            // 
+            this.pictureBox_LoadingAnim.Image = global::WindowsWOLEnabler.Properties.Resources.loading_animation;
+            this.pictureBox_LoadingAnim.Location = new System.Drawing.Point(161, 306);
+            this.pictureBox_LoadingAnim.Name = "pictureBox_LoadingAnim";
+            this.pictureBox_LoadingAnim.Size = new System.Drawing.Size(37, 30);
+            this.pictureBox_LoadingAnim.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_LoadingAnim.TabIndex = 5;
+            this.pictureBox_LoadingAnim.TabStop = false;
+            this.pictureBox_LoadingAnim.Visible = false;
+            // 
+            // toolTip_Info
+            // 
+            this.toolTip_Info.IsBalloon = true;
+            this.toolTip_Info.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip_Info.ToolTipTitle = "Info";
             // 
             // FormUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 378);
+            this.ClientSize = new System.Drawing.Size(360, 386);
+            this.Controls.Add(this.pictureBox_LoadingAnim);
             this.Controls.Add(this.Button_EnableWOL);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -193,13 +221,14 @@
             this.Name = "FormUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows WOL Enabler";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.FormMainForm_Load);
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_IPAddress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_MacAddress)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Logo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_LoadingAnim)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -217,6 +246,8 @@
         private System.Windows.Forms.Button Button_EnableWOL;
         private System.Windows.Forms.PictureBox pictureBox_MacAddress;
         private System.Windows.Forms.PictureBox pictureBox_IPAddress;
+        private System.Windows.Forms.PictureBox pictureBox_LoadingAnim;
+        private System.Windows.Forms.ToolTip toolTip_Info;
     }
 }
 

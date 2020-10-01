@@ -77,7 +77,7 @@ namespace WindowsWOL
             return PowerGuid;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void FormMainForm_Load(object sender, EventArgs e)
         {
             Button_EnableWOL.Enabled = true;
             Button_EnableWOL.Text = "Enable Wake-on-LAN";
@@ -106,13 +106,14 @@ namespace WindowsWOL
             textBox_MacAddress.Text = FormatValidateMacAddress;
 
             // --| I used this randomly generated mac address for screenshot
-            //textBox_MacAddress.Text = "BE-43-A2-67-6A-97";
+            // textBox_MacAddress.Text = "BE-43-A2-67-6A-97";
         }
 
         private void Button_EnableWOL_Click(object sender, EventArgs e)
         {
             Button_EnableWOL.Enabled = false;
             Button_EnableWOL.Text = "Please wait...";
+            pictureBox_LoadingAnim.Visible = true;
 
             ThreadPool.QueueUserWorkItem(EnableWakeonLAN);
         }
@@ -146,15 +147,16 @@ namespace WindowsWOL
             // --| https://docs.microsoft.com/en-us/powershell/module/netadapter/set-netadapteradvancedproperty?view=win10-ps
             RunSilentPowerShell("Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Wake on magic packet\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Shutdown Wake Up\" -DisplayValue \"Enabled\"; Set-NetAdapterAdvancedProperty -Name \"Ethernet\" -DisplayName \"Energy Efficient Ethernet\" -DisplayValue \"Disabled\"");
 
-            // --| Done :3
-            MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             // --| Re-enable the button
             Invoke(new Action(() =>
             {
                 Button_EnableWOL.Enabled = true;
                 Button_EnableWOL.Text = "Enable Wake-on-LAN";
+                pictureBox_LoadingAnim.Visible = false;
             }));
+
+            // --| Done :3
+            MessageBox.Show("Successfully enabled Wake-on-LAN operating system settings for this computer!\nIt is recommended to restart the computer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
